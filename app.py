@@ -1,5 +1,7 @@
 import streamlit as st
 import re
+from fpdf import FPDF
+import tempfile
 
 from components.sidebar import sidebar_inputs
 from utils.nutrition_utils import (
@@ -172,11 +174,64 @@ if st.button(plan_button_text, use_container_width=True):
         st.write("---")
         st.markdown(meal_plan_clean)
 
+        # ================= PDF GENERATION =================
+
+        pdf = FPDF()
+        pdf.add_page()
+
+        # Title
+        pdf.set_font("Arial", "B", 16)
+        pdf.cell(200, 10, "AI Meal Plan", ln=True, align="C")
+
+        pdf.ln(10)
+
+        # Summary
+        pdf.set_font("Arial", "B", 12)
+        pdf.cell(200, 10, "Nutrition Summary", ln=True)
+
+        pdf.set_font("Arial", size=11)
+
+        summary = f"""
+Goal: {goal}
+BMI: {bmi}
+Calories: {calories}
+Protein: {initial_macros['protein_g']} g
+Carbs: {initial_macros['carbs_g']} g
+Fats: {initial_macros['fats_g']} g
+Water: {water_require} L
+"""
+
+        pdf.multi_cell(0, 8, summary)
+
+        pdf.ln(5)
+
+        # Meal Plan
+        pdf.set_font("Arial", "B", 12)
+        pdf.cell(200, 10, "Meal Plan", ln=True)
+
+        pdf.set_font("Arial", size=10)
+
+        safe_text = meal_plan_clean.encode("latin-1", "ignore").decode("latin-1")
+
+        pdf.multi_cell(0, 7, safe_text)
+
+        # Generate PDF bytes
+        pdf_data = pdf.output(dest="S").encode("latin-1")
+
+        # DOWNLOAD BUTTON
+        st.download_button(
+            label="📥 Download Meal Plan PDF",
+            data=pdf_data,
+            file_name="meal_plan.pdf",
+            mime="application/pdf"
+        )
+
     except Exception as e:
         st.error("❌ Unexpected Error Occurred!")
         st.exception(e)
 
-
+        # SHOW MEAL PLAN
+        st.markdown(meal_plan_clean)
 # ---------------------------------------------------
 # FOOTER
 # ---------------------------------------------------
