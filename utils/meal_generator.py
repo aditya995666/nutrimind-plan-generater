@@ -47,57 +47,22 @@ LANGUAGE RULE (STRICT & NON-NEGOTIABLE):
 👉 Use professional clinical English terminology only
 
 🚨 ABSOLUTE MANDATORY RULE:
-👉 Generate a meal plan for EXACTLY {plan_days} DAYS
-• If 3 Days selected → generate Day 1 to Day 3
-• If 7 Days selected → generate Day 1 to Day 7
-• Do NOT generate extra days
+👉 You MUST generate a meal plan for **EXACTLY {plan_days} DAYS ONLY**.
+👉 You MUST generate **Day 1, Day 2, ... up to Day {plan_days}**.
 
 🚫 NON-NEGOTIABLE HARD RULES:
-• NEVER leave Calories column blank or empty
-• NEVER override backend macros
-• Use realistic Indian nutrition values
-• Nutrition values should be approximately accurate
-• Portion sizes must be realistic
-• Avoid impossible calorie combinations
-• Daily calories can vary slightly (±50 kcal)
+• You MUST calculate and fill Calories column with actual numbers.
+• NEVER estimate macros of food.
+• NEVER override backend macros.
+• Adjust ONLY quantities to match backend macros.
+• NEVER modify meal timing.
+• ALWAYS respect user's habitual diet CATEGORY, not exact dishes.
+• Avoid repetition unless habits require.
+• Use ONLY foods allowed by diet/allergy/state.
+• CURRENT DIET = {diet}. If Vegetarian: NO fish, NO chicken, NO egg, NO meat. ONLY plant-based protein.
+• DO NOT add any theories (TDEE, BMR, formulas).
 
-🔥 CRITICAL DIET RULE 🔥
-• User's Diet Type = {diet}
-• If diet = "Vegetarian" → NO egg, NO chicken, NO fish, NO meat
-• If diet = "Non-Vegetarian" → eggs, chicken, fish allowed
-• If diet = "Vegan" → NO dairy, NO eggs, NO animal products
-• CURRENT USER DIET = {diet} → STRICTLY follow this!
-
-🔥 REGIONAL FOOD ENFORCEMENT:
-• If region = North Indian or state = UP:
-  use foods like roti, dal, sabzi, poha, upma, khichdi,
-  chole, rajma, curd, seasonal vegetables, oats, sprouts
-
-
-• Avoid foreign foods unless explicitly requested
-• Do NOT generate foods like tacos, quesadilla, pasta, sushi, burgers
-• STRICTLY follow selected rice type
-• If rice type = white rice → do not use brown rice
-
-• Nutrition values should vary naturally based on ingredients
-• Avoid repeating identical calories and protein values across meals
-
-• Use medically realistic calorie estimations
-• Avoid unrealistically low calorie values
-
-• Use realistic Indian dish naming conventions
-
-🚫 FOOD AVOIDANCE RULE:
-• NEVER include foods marked as "None"
-• If Paneer Intake = None → no paneer dishes
-• If Soy Intake = None → no tofu/soy dishes
-
-
-• STRICTLY NEVER include foods marked as "None"
-• If Paneer Intake = None → paneer dishes are completely prohibited
-• If Soy Intake = None → tofu/soy dishes are completely prohibited 
-
-⚠ FINAL BACKEND TARGETS (APPROXIMATE RANGE):
+⚠ FINAL BACKEND VALUES (MUST MATCH EXACTLY):
 Calories/day = {calories}
 Protein/day = {final_protein} g
 Carbs/day   = {macros['carbs_g']} g
@@ -162,8 +127,7 @@ Calories Target: {system_calories}
 Macro Targets: {system_macros}
 Water Requirement: {system_water}
 
-Use backend targets as primary guidance.
-Nutrition values should remain approximately close to backend targets.
+🚫 DO NOT RECALCULATE ANYTHING.
 
 =====================================
 🕒 FIXED MEAL TIMINGS
@@ -175,44 +139,17 @@ Nutrition values should remain approximately close to backend targets.
 • Dinner – 20:30
 
 =====================================
-📋 OUTPUT FORMAT (MUST FOLLOW EXACTLY)
+📋 OUTPUT FORMAT (STRICT)
 =====================================
 
-YOUR TARGET: {calories} CALORIES PER DAY 
+Day X:
+| Meal | Time | Food (Exact g/ml/pcs) | Calories | Protein(g) | Benefit |
+|------|------|------------------------|----------|-------------|---------|
 
-INTERNAL AI INSTRUCTIONS (DO NOT DISPLAY TO USER):
-• Maintain healthy variety across all selected days
-• Avoid repeating the same MAIN DISH consecutively
-• Staples like roti, rice, dal may repeat naturally
-• Meals must look like realistic Indian household meals
-• Prefer authentic regional Indian foods
-• Breakfast should contain approximately 20–25% of daily calories
-• Snack should contain approximately 5–10% of daily calories
-• Lunch should contain approximately 30–35% of daily calories
-• Dinner should contain approximately 30–35% of daily calories
-• Do NOT print these rules in final output
-
-Day 1:
-Day 1:
-
-| Meal | Time | Food (Exact g/ml/pcs) | Approx Calories | Approx Protein(g) | Benefit |
-|------|------|------------------------|------------------|-------------------|---------|
-| Breakfast | 08:00 | [FOOD with quantity] | [REALISTIC VALUE] | [REALISTIC VALUE] | [BENEFIT] |
-| Snack | 11:00 | [FOOD with quantity] | [REALISTIC VALUE] | [REALISTIC VALUE] | [BENEFIT] |
-| Lunch | 14:00 | [FOOD with quantity] | [REALISTIC VALUE] | [REALISTIC VALUE] | [BENEFIT] |
-| Snack | 17:00 | [FOOD with quantity] | [REALISTIC VALUE] | [REALISTIC VALUE] | [BENEFIT] |
-| Dinner | 20:30 | [FOOD with quantity] | [REALISTIC VALUE] | [REALISTIC VALUE] | [BENEFIT] |
 Day Summary:
-• Total Calories: {calories}
-• Total Protein: {final_protein}
-• Health Benefits Summary: [Write 2-3 lines]
-
-
-
-Continue generating all days until the selected duration is completed.
-Every day must contain different meals and realistic Indian foods.
-
-NOW GENERATE YOUR MEAL PLAN:
+• Total Calories: MUST MATCH {calories}
+• Total Protein: MUST MATCH {final_protein}
+• Health Benefits Summary
 
 =====================================
 📊 FINAL MANDATORY OUTPUT BLOCK
@@ -231,12 +168,12 @@ Water Requirement: {water_require}
 • DO NOT repeat the same food items verbatim
 • You MUST create a proper meal plan using allowed Indian foods
 • Meals should be habit-compatible, not habit-duplicated
-• Food variety across all generated days is MANDATORY
+• Food variety across Day 1–Day {plan_days} is MANDATORY
 
 📌 FOOD VARIETY ENFORCEMENT:
-• Breakfast dishes must be different across all generated days
-• Lunch main dishes must be different across all generated days
-• Dinner main dishes must be different across all generated days
+• Breakfast dishes must be DIFFERENT across all {plan_days} days
+• Lunch main dish must be DIFFERENT across all {plan_days} days
+• Dinner main dish must be DIFFERENT across all {plan_days} days
 • Repetition is allowed ONLY for staples (roti/rice), not dishes
 
 """

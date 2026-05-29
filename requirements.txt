@@ -1,10 +1,12 @@
 streamlit
-pandas
-numpy
-google-generativeai
-python-dotenv
+requests
+reportlab
 fastapi
 uvicorn
-pydantic
+google-generativeai
+python-dotenv
+pandas
+numpy
 groq
 fpdf
+re
